@@ -13,7 +13,7 @@ public class Cliente_Servidor_Proyecto {
     public static void main(String[] args) {
         String Prueba;
         System.out.println("hola");
-        System.out.println("miau");
+        System.out.println("prueba 1");
         
     }
 }
