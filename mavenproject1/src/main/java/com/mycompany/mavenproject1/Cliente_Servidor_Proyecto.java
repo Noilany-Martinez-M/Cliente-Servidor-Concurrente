@@ -14,5 +14,6 @@ public class Cliente_Servidor_Proyecto {
         String Prueba;
         System.out.println("hola");
         
+        
     }
 }
