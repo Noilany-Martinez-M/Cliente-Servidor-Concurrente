@@ -4,6 +4,7 @@
 
 package com.mycompany.mavenproject1;
 
+
 /**
  *
  * @author Maytan
@@ -11,9 +12,28 @@ package com.mycompany.mavenproject1;
 public class Cliente_Servidor_Proyecto {
 
     public static void main(String[] args) {
-        String Prueba;
-        System.out.println("hola");
-        System.out.println("prueba 1");
+        
+        //PRUEBA
+        Jugador j1 = new Portero(1, "Carlos", "Heredia");
+        Jugador j2 = new Defensa(2, "Luis", "Alajuela");
+        Jugador j3 = new Mediocampo(3, "Juan", "Heredia");
+        Jugador j4 = new Delantero(4, "Pedro", "Cartago");
+
+        // Crear equipo
+        Equipo puntarenas = new Equipo(1, "PUNTARENAS");
+        puntarenas.agregarJugador(j1);
+        puntarenas.agregarJugador(j2);
+        puntarenas.agregarJugador(j3);
+        puntarenas.agregarJugador(j4);
+
+        // Probar polimorfismo
+        System.out.println(j1.generarMensaje());
+        System.out.println(j2.generarMensaje());
+        System.out.println(j3.generarMensaje());
+        System.out.println(j4.generarMensaje());
+
+        // Ver cantidad de jugadores
+        System.out.println("Cantidad de jugadores en Puntarenas " + puntarenas.getCantidadJugadores());
         
     }
 }
