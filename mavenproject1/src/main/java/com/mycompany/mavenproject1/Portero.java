@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Maytan
  */
-public class Portero extends Jugador {
+public class Portero extends JugadorFutbol {
 
     private static final String[] FRASES = {
             "   SALTA Y ATAJA UN TIRO DE ESQUINA",

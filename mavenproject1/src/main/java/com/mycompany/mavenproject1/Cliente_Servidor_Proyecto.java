@@ -14,10 +14,10 @@ public class Cliente_Servidor_Proyecto {
     public static void main(String[] args) {
         
         //PRUEBA
-        Jugador j1 = new Portero(1, "Carlos", "Heredia");
-        Jugador j2 = new Defensa(2, "Luis", "Alajuela");
-        Jugador j3 = new Mediocampo(3, "Juan", "Heredia");
-        Jugador j4 = new Delantero(4, "Pedro", "Cartago");
+        JugadorFutbol j1 = new Portero(1, "Carlos", "Heredia");
+        JugadorFutbol j2 = new Defensa(2, "Luis", "Alajuela");
+        JugadorFutbol j3 = new Mediocampo(3, "Juan", "Heredia");
+        JugadorFutbol j4 = new Delantero(4, "Pedro", "Cartago");
 
         // Crear equipo
         Equipo puntarenas = new Equipo(1, "PUNTARENAS");

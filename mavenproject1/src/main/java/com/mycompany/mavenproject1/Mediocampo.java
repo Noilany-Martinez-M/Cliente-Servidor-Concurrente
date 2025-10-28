@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Maytan
  */
-public class Mediocampo extends Jugador {
+public class Mediocampo extends JugadorFutbol {
 
     private static final String[] FRASES = {
             "CAMBIA DE RITMO Y HACE MAS PASES",

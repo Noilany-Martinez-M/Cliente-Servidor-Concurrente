@@ -1,7 +1,7 @@
 
 package com.mycompany.mavenproject1;
 
-public abstract class Jugador {
+public abstract class JugadorFutbol {
     
     protected int id;
     protected String nombre;
@@ -9,7 +9,7 @@ public abstract class Jugador {
     protected int goles;
     protected int acciones;
 
-    public Jugador(int id, String nombre, String equipo) {
+    public JugadorFutbol(int id, String nombre, String equipo) {
         this.id = id;
         this.nombre = nombre;
         this.equipo = equipo;
@@ -17,7 +17,7 @@ public abstract class Jugador {
         this.acciones = 0;
     }
 
-    public Jugador(int id, String nombre) {
+    public JugadorFutbol(int id, String nombre) {
         this(id, nombre, "NINGUNO");
     }
 

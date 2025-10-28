@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Maytan
  */
-public class Defensa extends Jugador{
+public class Defensa extends JugadorFutbol{
 
     private static final String[] FRASES = {
             "ANTICIPA Y SE ROBA EL BALON",

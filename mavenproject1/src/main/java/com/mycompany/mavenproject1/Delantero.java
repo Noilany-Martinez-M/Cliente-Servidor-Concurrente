@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Maytan
  */
-public class Delantero extends Jugador {
+public class Delantero extends JugadorFutbol {
 
     private static final String[] FRASES = {
             "se desmarca y define cruzado.",

@@ -15,7 +15,7 @@ public class Equipo {
 
     private int id;
     private String nombre;
-    private ArrayList<Jugador> jugadores;
+    private ArrayList<JugadorFutbol> jugadores;
     private int partidosJugados, victorias, empates, derrotas;
     private int golesFavor, golesContra, puntos;
 
@@ -25,12 +25,12 @@ public class Equipo {
         this.jugadores = new ArrayList<>();
     }
 
-    public void agregarJugador(Jugador j) {
+    public void agregarJugador(JugadorFutbol j) {
         jugadores.add(j);
         j.setEquipo(nombre);
     }
 
-    public void eliminarJugador(Jugador j) {
+    public void eliminarJugador(JugadorFutbol j) {
         jugadores.remove(j);
         j.setEquipo("Ninguno");
     }
@@ -57,11 +57,11 @@ public class Equipo {
         this.nombre = nombre;
     }
 
-    public ArrayList<Jugador> getJugadores() {
+    public ArrayList<JugadorFutbol> getJugadores() {
         return jugadores;
     }
 
-    public void setJugadores(ArrayList<Jugador> jugadores) {
+    public void setJugadores(ArrayList<JugadorFutbol> jugadores) {
         this.jugadores = jugadores;
     }
 
