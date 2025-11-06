@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -31,6 +32,7 @@ public class FrEquipos extends javax.swing.JFrame {
         });
         
         this.principal = principal;
+        cargarTablaEquipos();
     }
 
     /**
@@ -52,6 +54,8 @@ public class FrEquipos extends javax.swing.JFrame {
         btnCrear = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEquipos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -175,15 +179,53 @@ public class FrEquipos extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
+        tblEquipos.setBackground(new java.awt.Color(242, 242, 242));
+        tblEquipos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Nombre", "Jugadores"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblEquipos.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                tblEquiposComponentHidden(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEquipos);
+        if (tblEquipos.getColumnModel().getColumnCount() > 0) {
+            tblEquipos.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tblEquipos.getColumnModel().getColumn(0).setMaxWidth(70);
+            tblEquipos.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblEquipos.getColumnModel().getColumn(1).setMaxWidth(125);
+            tblEquipos.getColumnModel().getColumn(2).setPreferredWidth(35);
+            tblEquipos.getColumnModel().getColumn(2).setMaxWidth(60);
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(181, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -193,7 +235,9 @@ public class FrEquipos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         pack();
@@ -224,6 +268,8 @@ public class FrEquipos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Equipo agregado correctamente\n ID: "+nuevo.getId()+"\nNombre: "+nuevo.getNombre()+"\nRegistro exitoso");
             
             txtNombreEq.setText("");
+            cargarTablaEquipos();
+            
             
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad de obras e ingresos deben de ser numericos", JOptionPane.ERROR_MESSAGE);
@@ -233,18 +279,100 @@ public class FrEquipos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+        try{
+            int fila = tblEquipos.getSelectedRow();
+            if (fila == -1){
+                JOptionPane.showMessageDialog(this, "Selecciona una tabla",
+                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            String nuevoNombre = txtNombreEq.getText().trim();
+            if(nuevoNombre.isEmpty()){
+                JOptionPane.showMessageDialog(this, "",
+                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            Equipo equipoSelec = Util.listaEquipo.get(fila);
+            String equipoAnt = equipoSelec.getNombre();
+            
+            equipoSelec.setNombre(nuevoNombre);
+            
+            for(JugadorFutbol jugador : Util.listaJugadores){
+                if (jugador.getEquipo().equalsIgnoreCase(equipoAnt)){
+                    jugador.setEquipo(nuevoNombre);
+                }
+            }
+            
+            JOptionPane.showMessageDialog(this, "El equipo fue renombrado correctamente\nAntiguo: "+equipoAnt+"\nNuevo: "+nuevoNombre);
+            
+            cargarTablaEquipos();        
+                    
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+         try{
+            int fila = tblEquipos.getSelectedRow();
+            if (fila == -1){
+                JOptionPane.showMessageDialog(this, "Selecciona una tabla",
+                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            Equipo equipoSelec = Util.listaEquipo.get(fila);
+            String equipoNom = equipoSelec.getNombre();
+            
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar el equipos "+equipoSelec+"?","CONFIRMAR ELIMINACION",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            
+            if(opcion ==JOptionPane.YES_OPTION){
+                Util.listaEquipo.remove(equipoSelec);
+                for (JugadorFutbol jugador : Util.listaJugadores) {
+                    if (jugador.getEquipo().equalsIgnoreCase(equipoNom)) {
+                        jugador.setEquipo("Ninguno");
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Equipo eliminado Correctamente\nLos jugadores ahora no pertenecen a ningun equipo\nEliminacion Exitosa");
+            
+                cargarTablaEquipos(); 
+                
+            }
+            
+                   
+                    
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void tblEquiposComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tblEquiposComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblEquiposComponentHidden
+    
+    private void cargarTablaEquipos(){
+        DefaultTableModel modelo = (DefaultTableModel)tblEquipos.getModel();
+        modelo.setRowCount(0);
+        
+        for(Equipo eq: Util.listaEquipo){
+            Object[] fila = {
+                eq.getId(), eq.getNombre(), eq.getJugadores()
+            };
+            
+            modelo.addRow(fila);
+        }
+    }
+    
     public void volverPrincipal() {
         principal.setVisible(true);
         dispose();
     }
+    
+    private ArrayList<Equipo> listaEquipos = new ArrayList<>();
     private Menu principal;
+    private DefaultTableModel modeloTabla;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCrear;
@@ -255,6 +383,8 @@ public class FrEquipos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblEquipos;
     private javax.swing.JTextField txtNombreEq;
     // End of variables declaration//GEN-END:variables
 }

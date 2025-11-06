@@ -320,11 +320,7 @@ public class FrJugador extends javax.swing.JFrame {
             
             limpiarFormulario();
             
-        } catch (NumberFormatException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad de obras e ingresos deben de ser numericos", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        catch (Exception ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -341,7 +337,7 @@ public class FrJugador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     public void volverPrincipal() {
