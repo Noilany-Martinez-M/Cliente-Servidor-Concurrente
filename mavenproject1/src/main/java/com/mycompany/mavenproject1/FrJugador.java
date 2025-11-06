@@ -50,9 +50,9 @@ public class FrJugador extends javax.swing.JFrame {
         cbEquipo.removeAllItems();
         
         cbEquipo.addItem("Ninguno");
-//        for (Equipo eq: Util.listaEquipo){
-//            cbEquipo.addItem(eq);
-//        }
+        for (Equipo eq: Util.listaEquipo){
+            cbEquipo.addItem(eq.getNombre());
+        }
         
     }
 
@@ -284,6 +284,7 @@ public class FrJugador extends javax.swing.JFrame {
 
             String Posicion = cbPosicion.getSelectedItem().toString();
             String Equipo = cbEquipo.getSelectedItem().toString();
+            
             
             if (nombre.isEmpty() || Equipo.isEmpty() || Posicion.isEmpty()){
                 JOptionPane.showMessageDialog(this, "No es posible que deje ningun espacio vacio",

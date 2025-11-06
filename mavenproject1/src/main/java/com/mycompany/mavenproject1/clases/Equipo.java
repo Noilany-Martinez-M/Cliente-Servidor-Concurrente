@@ -6,16 +6,17 @@ import java.util.ArrayList;
 
 
 public class Equipo {
-
-    private int id;
+    
+    private int contador=1;
+    private int id=100;
     private String nombre;
     int cantidadJugadores;
     private ArrayList<JugadorFutbol> jugadores;
     private int partidosJugados, victorias, empates, derrotas;
     private int golesFavor, golesContra, puntos;
 
-    public Equipo(int id, String nombre) {
-        this.id = id;
+    public Equipo(String nombre) {
+        this.id = contador++;
         this.nombre = nombre;
         this.jugadores = new ArrayList<>();
     }

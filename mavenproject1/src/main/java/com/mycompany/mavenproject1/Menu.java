@@ -85,7 +85,9 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
-        // TODO add your handling code here:
+        FrEquipos frequipos = new FrEquipos(this);
+        frequipos.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnAgregarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJugadorActionPerformed
