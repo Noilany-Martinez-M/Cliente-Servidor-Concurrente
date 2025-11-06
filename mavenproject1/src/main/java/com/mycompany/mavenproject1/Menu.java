@@ -1,7 +1,6 @@
 
 package com.mycompany.mavenproject1;
-import clases.*;
-import java.util.ArrayList;
+import com.mycompany.mavenproject1.clases.*;
 
 public class Menu extends javax.swing.JFrame {
 

@@ -1,13 +1,18 @@
 
 package com.mycompany.mavenproject1;
-import Clases.*;
-import Clases.JugadorFutbol;
+import com.mycompany.mavenproject1.clases.Defensa;
+import com.mycompany.mavenproject1.clases.Delantero;
+import com.mycompany.mavenproject1.clases.JugadorFutbol;
+import com.mycompany.mavenproject1.clases.Mediocampo;
+import com.mycompany.mavenproject1.clases.Portero;
+import com.mycompany.mavenproject1.clases.Util;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.mycompany.mavenproject1.clases.*;
 
 
 public class FrJugador extends javax.swing.JFrame {
@@ -289,16 +294,28 @@ public class FrJugador extends javax.swing.JFrame {
             JugadorFutbol nuevo = null;
             
             switch(Posicion){
-                case "Portero": nuevo= new Portero(nombre, Equipo);
-                case "Defensa": nuevo = new Defensa(nombre, Equipo);
-                case "Delantero": nuevo = new Delantero(nombre, Equipo);
-                case "Medio Campo": nuevo = new Mediocampo (nombre, Equipo);
+                case "Portero": 
+                    nuevo= new Portero(nombre, Equipo);
+                    break;
+                case "Defensa": 
+                    nuevo = new Defensa(nombre, Equipo);
+                    break;
+                case "Delantero": 
+                    nuevo = new Delantero(nombre, Equipo);
+                    break;
+                case "Medio Campo": 
+                    nuevo = new Mediocampo (nombre, Equipo);
+                    break;
             }
             
             Util.listaJugadores.add(nuevo);
             
             JOptionPane.showMessageDialog(this, "Jugador agregado correctamente\n"
-                    +"ID: "+nuevo.getId()+"\nNombre: "+nuevo.getNombre()+"\nRol"+Posicion+"\nEquipo"+nuevo.getEquipo()+"\nRegistro Exitoso");
+                    +"ID: "+nuevo.getId()
+                    +"\nNombre: "+nuevo.getNombre()
+                    +"\nRol: "+Posicion
+                    +"\nEquipo: "+nuevo.getEquipo()
+                    +"\nRegistro Exitoso");
             
             limpiarFormulario();
             

@@ -1,6 +1,7 @@
 
-package Clases;
+package com.mycompany.mavenproject1.clases;
 
+import com.mycompany.mavenproject1.clases.JugadorFutbol;
 import java.util.ArrayList;
 
 

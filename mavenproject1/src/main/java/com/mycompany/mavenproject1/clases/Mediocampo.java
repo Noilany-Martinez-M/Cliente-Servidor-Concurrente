@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Clases;
+package com.mycompany.mavenproject1.clases;
 
 import java.util.Random;
 
@@ -10,23 +10,23 @@ import java.util.Random;
  *
  * @author Maytan
  */
-public class Delantero extends JugadorFutbol {
+public class Mediocampo extends JugadorFutbol {
 
     private static final String[] FRASES = {
-            "se desmarca y define cruzado.",
-            "controla de espaldas y asiste al compañero.",
-            "prueba de media distancia y casi anota.",
-            "gana la posición y remata de primera."
+            "cambia de ritmo y distribuye el juego",
+            "recupera y lanza un pase entre lineas",
+            "toca y mueve para dar salida",
+            "presiona alta y fuerza el error"
     };
 
-    public Delantero(String nombre, String equipo) {
+    public Mediocampo(String nombre, String equipo) {
         super(nombre, equipo);
     }
+
 
     @Override
     public String generarMensaje() {
         Random r = new Random();
         return "[Equipo: " + equipo + "] " + nombre + " " + FRASES[r.nextInt(FRASES.length)];
     }
-    
 }

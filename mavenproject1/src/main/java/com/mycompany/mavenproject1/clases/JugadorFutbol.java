@@ -1,5 +1,5 @@
 
-package Clases;
+package com.mycompany.mavenproject1.clases;
 
 public abstract class JugadorFutbol {
     private static int contador = 1;
