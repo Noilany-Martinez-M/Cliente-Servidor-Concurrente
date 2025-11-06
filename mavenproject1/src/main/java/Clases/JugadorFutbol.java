@@ -1,24 +1,24 @@
 
-package com.mycompany.mavenproject1;
+package Clases;
 
 public abstract class JugadorFutbol {
-    
+    private static int contador = 1;
     protected int id;
     protected String nombre;
     protected String equipo;
     protected int goles;
     protected int acciones;
 
-    public JugadorFutbol(int id, String nombre, String equipo) {
-        this.id = id;
+    public JugadorFutbol(String nombre, String equipo) {
+        this.id = contador++;
         this.nombre = nombre;
         this.equipo = equipo;
         this.goles = 0;
         this.acciones = 0;
     }
 
-    public JugadorFutbol(int id, String nombre) {
-        this(id, nombre, "NINGUNO");
+    public JugadorFutbol(String nombre) {
+        this(nombre, "NINGUNO");
     }
 
     public abstract String generarMensaje();

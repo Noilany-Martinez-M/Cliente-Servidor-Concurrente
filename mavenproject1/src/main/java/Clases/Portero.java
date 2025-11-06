@@ -2,25 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.mavenproject1;
-
+package Clases;
 import java.util.Random;
 
 /**
  *
  * @author Maytan
  */
-public class Delantero extends JugadorFutbol {
+public class Portero extends JugadorFutbol {
 
     private static final String[] FRASES = {
-            "se desmarca y define cruzado.",
-            "controla de espaldas y asiste al compañero.",
-            "prueba de media distancia y casi anota.",
-            "gana la posición y remata de primera."
+            "vuela y ataja un disparo a ras de piso",
+            "ordena la defensa y pide calma desde el arco",
+            "sale rapido y corta un mano a mano",
+            "bloquea con reflejos felinos y evita el gol"
     };
 
-    public Delantero(int id, String nombre, String equipo) {
-        super(id, nombre, equipo);
+    public Portero(String nombre, String equipo) {
+        super(nombre, equipo);
     }
 
     @Override

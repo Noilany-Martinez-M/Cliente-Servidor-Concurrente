@@ -1,20 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.mavenproject1;
+
+package Clases;
 
 import java.util.ArrayList;
 
 
-/**
- *
- * @author Maytan
- */
 public class Equipo {
 
     private int id;
     private String nombre;
+    int cantidadJugadores;
     private ArrayList<JugadorFutbol> jugadores;
     private int partidosJugados, victorias, empates, derrotas;
     private int golesFavor, golesContra, puntos;
@@ -120,5 +114,7 @@ public class Equipo {
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
+    
+    
     
 }
