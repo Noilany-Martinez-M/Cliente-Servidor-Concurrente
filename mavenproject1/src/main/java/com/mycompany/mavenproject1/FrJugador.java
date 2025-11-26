@@ -278,7 +278,7 @@ public class FrJugador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        
+        //RECORDAR AGREGAR A BASE DE DATOS-----------------------------------
         try {
             String nombre = txtNombre.getText().trim();
 
@@ -308,7 +308,7 @@ public class FrJugador extends javax.swing.JFrame {
                     nuevo = new Mediocampo (nombre, Equipo);
                     break;
             }
-            
+            //RECORDAR AGREGAR A BASE DE DATOS
             Util.listaJugadores.add(nuevo);
             
             JOptionPane.showMessageDialog(this, "Jugador agregado correctamente\n"
@@ -333,11 +333,13 @@ public class FrJugador extends javax.swing.JFrame {
     }
     
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+        //RECORDAR ACTUALIZAR A BASE DE DATOS-----------------------------------
+        //poner en el formulario los datos del jugador al apretarlo en la table
+        
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+        //eliminar al tocar la table
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     public void volverPrincipal() {
