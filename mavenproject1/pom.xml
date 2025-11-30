@@ -10,4 +10,11 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.mavenproject1.Cliente_Servidor_Proyecto</exec.mainClass>
     </properties>
+     <dependencies>
+        <dependency>
+            <version>8.0.33</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
 </project>

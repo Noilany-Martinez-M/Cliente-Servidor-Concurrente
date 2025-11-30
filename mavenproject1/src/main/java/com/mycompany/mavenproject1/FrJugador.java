@@ -1,5 +1,5 @@
-
 package com.mycompany.mavenproject1;
+
 import com.mycompany.mavenproject1.clases.Defensa;
 import com.mycompany.mavenproject1.clases.Delantero;
 import com.mycompany.mavenproject1.clases.JugadorFutbol;
@@ -13,30 +13,32 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.mycompany.mavenproject1.clases.*;
-
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
+import java.sql.PreparedStatement;
+import com.mycompany.mavenproject1.clases.Conexion;
+import java.sql.ResultSet;
 
 public class FrJugador extends javax.swing.JFrame {
 
     public FrJugador(Menu principal) {
         initComponents();
-        
+
         setLocationRelativeTo(null);
-        
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 volverPrincipal();
             }
         });
-        
+
         this.principal = principal;
-        
+
         //TABLA DE JUGADORES
-        
         modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Rol",
             "Equipo"}, 0);
         tblRegistro.setModel(modeloTabla);
-        
+
         //-------[COMBO BOX EQUIPOS
         cbPosicion.removeAllItems();
 
@@ -44,19 +46,51 @@ public class FrJugador extends javax.swing.JFrame {
         cbPosicion.addItem("Defensa");
         cbPosicion.addItem("Delantero");
         cbPosicion.addItem("Medio Campo");
-        
+
         //-------[COMBO BOX EQUIPOS
-        
         cbEquipo.removeAllItems();
-        
+
         cbEquipo.addItem("Ninguno");
-        for (Equipo eq: Util.listaEquipo){
+        for (Equipo eq : Util.listaEquipo) {
             cbEquipo.addItem(eq.getNombre());
         }
-        
+
     }
 
-   
+    private void cargarTabla(){
+    Conexion conexion = new Conexion();
+    String sql = "SELECT id, nombre tipo_rol, nombre equipo FROM jugadores";
+        try {
+            PreparedStatement ps = conexion.conectar().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            modeloTabla.setRowCount(0);
+            while(rs.next()){
+            modeloTabla.addRow(new Object[]{
+            rs.getInt("id"),
+            rs.getString("nombre"),
+            rs.getString("tipo_rol"),
+            rs.getString("nombre_equipo")
+            });
+                    
+            }
+            rs.close();
+            ps.close();
+            conexion.desconectar();
+  
+        } catch (Exception ex) {
+          JOptionPane.showMessageDialog(this, "Error" +ex.getMessage());
+            
+            
+        }
+        
+        cargarTabla();
+    }
+    
+    
+    
+    
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -269,73 +303,92 @@ public class FrJugador extends javax.swing.JFrame {
         if (cbPosicion.getSelectedItem() == null) {
             return;
         }
-        
-        
+
+
     }//GEN-LAST:event_cbPosicionActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-    limpiarFormulario();
+        limpiarFormulario();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         //RECORDAR AGREGAR A BASE DE DATOS-----------------------------------
+        Conexion conexion = new Conexion();
+
         try {
+           
+
             String nombre = txtNombre.getText().trim();
 
             String Posicion = cbPosicion.getSelectedItem().toString();
             String Equipo = cbEquipo.getSelectedItem().toString();
-            
-            
-            if (nombre.isEmpty() || Equipo.isEmpty() || Posicion.isEmpty()){
+
+            if (nombre.isEmpty() || Equipo.isEmpty() || Posicion.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No es posible que deje ningun espacio vacio",
                         "Campos vacíos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
+
             JugadorFutbol nuevo = null;
-            
-            switch(Posicion){
-                case "Portero": 
-                    nuevo= new Portero(nombre, Equipo);
+
+            switch (Posicion) {
+                case "Portero":
+                    nuevo = new Portero(nombre, Equipo);
                     break;
-                case "Defensa": 
+                case "Defensa":
                     nuevo = new Defensa(nombre, Equipo);
                     break;
-                case "Delantero": 
+                case "Delantero":
                     nuevo = new Delantero(nombre, Equipo);
                     break;
-                case "Medio Campo": 
-                    nuevo = new Mediocampo (nombre, Equipo);
+                case "Medio Campo":
+                    nuevo = new Mediocampo(nombre, Equipo);
                     break;
             }
             //RECORDAR AGREGAR A BASE DE DATOS
             Util.listaJugadores.add(nuevo);
             
+             try {
+                String sql = "INSERT INTO jugadores (nombre, tipo_rol,nombre_equipo,goles,acciones) VALUES (?,?,?,0,0)";
+                PreparedStatement ps = conexion.conectar().prepareStatement(sql);
+                ps.setString(1, nuevo.getNombre());
+                ps.setString(2, nuevo.getClass().getSimpleName());
+                ps.setString(3, nuevo.getEquipo());
+                
+                ps.executeUpdate();
+                ps.close();
+                
+                JOptionPane.showMessageDialog(this, "Jugador agregado correctamente");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: "+ex.getMessage());
+            }
+             
+             
             JOptionPane.showMessageDialog(this, "Jugador agregado correctamente\n"
-                    +"ID: "+nuevo.getId()
-                    +"\nNombre: "+nuevo.getNombre()
-                    +"\nRol: "+Posicion
-                    +"\nEquipo: "+nuevo.getEquipo()
-                    +"\nRegistro Exitoso");
-            
+                    + "ID: " + nuevo.getId()
+                    + "\nNombre: " + nuevo.getNombre()
+                    + "\nRol: " + Posicion
+                    + "\nEquipo: " + nuevo.getEquipo()
+                    + "\nRegistro Exitoso");
+
             limpiarFormulario();
-            
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void limpiarFormulario(){
+    private void limpiarFormulario() {
         txtNombre.setText("");
         cbPosicion.setSelectedIndex(0);
         cbEquipo.setSelectedIndex(0);
-        
+
     }
-    
+
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         //RECORDAR ACTUALIZAR A BASE DE DATOS-----------------------------------
         //poner en el formulario los datos del jugador al apretarlo en la table
-        
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
