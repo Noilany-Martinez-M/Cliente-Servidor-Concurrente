@@ -57,40 +57,40 @@ public class FrJugador extends javax.swing.JFrame {
 
     }
 
-    private void cargarTabla(){
-    Conexion conexion = new Conexion();
-    String sql = "SELECT id, nombre tipo_rol, nombre equipo FROM jugadores";
+    private void cargarTabla() {
+        Conexion conexion = new Conexion();
+        String[] columnas = {"ID", "Nombre", "Rol", "Equipo"};
+        modeloTabla = new DefaultTableModel(null, columnas);
+
         try {
+            String sql = "SELECT id, nombre, tipo_rol, nombre equipo FROM jugadores";
             PreparedStatement ps = conexion.conectar().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             modeloTabla.setRowCount(0);
-            while(rs.next()){
-            modeloTabla.addRow(new Object[]{
-            rs.getInt("id"),
-            rs.getString("nombre"),
-            rs.getString("tipo_rol"),
-            rs.getString("nombre_equipo")
-            });
+            while (rs.next()) {
+                modeloTabla.addRow(new Object[]{
+                     rs.getInt("id"),
+                     rs.getString("nombre"),
+                     rs.getString("tipo_rol"),
+                     rs.getString("nombre_equipo")
+                        
                     
+                });
+
             }
+            
+            tblRegistro.setModel(modeloTabla);
             rs.close();
             ps.close();
             conexion.desconectar();
-  
+
         } catch (Exception ex) {
-          JOptionPane.showMessageDialog(this, "Error" +ex.getMessage());
-            
-            
+            JOptionPane.showMessageDialog(this, "Error" + ex.getMessage());
+
         }
-        
-        cargarTabla();
+
     }
-    
-    
-    
-    
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -316,7 +316,6 @@ public class FrJugador extends javax.swing.JFrame {
         Conexion conexion = new Conexion();
 
         try {
-           
 
             String nombre = txtNombre.getText().trim();
 
@@ -347,23 +346,22 @@ public class FrJugador extends javax.swing.JFrame {
             }
             //RECORDAR AGREGAR A BASE DE DATOS
             Util.listaJugadores.add(nuevo);
-            
-             try {
+
+            try {
                 String sql = "INSERT INTO jugadores (nombre, tipo_rol,nombre_equipo,goles,acciones) VALUES (?,?,?,0,0)";
                 PreparedStatement ps = conexion.conectar().prepareStatement(sql);
                 ps.setString(1, nuevo.getNombre());
                 ps.setString(2, nuevo.getClass().getSimpleName());
                 ps.setString(3, nuevo.getEquipo());
-                
+
                 ps.executeUpdate();
                 ps.close();
-                
+
                 JOptionPane.showMessageDialog(this, "Jugador agregado correctamente");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: "+ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
-             
-             
+
             JOptionPane.showMessageDialog(this, "Jugador agregado correctamente\n"
                     + "ID: " + nuevo.getId()
                     + "\nNombre: " + nuevo.getNombre()
@@ -372,6 +370,7 @@ public class FrJugador extends javax.swing.JFrame {
                     + "\nRegistro Exitoso");
 
             limpiarFormulario();
+            cargarTabla();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -389,10 +388,71 @@ public class FrJugador extends javax.swing.JFrame {
         //RECORDAR ACTUALIZAR A BASE DE DATOS-----------------------------------
         //poner en el formulario los datos del jugador al apretarlo en la table
 
+        Conexion conexion = new Conexion();
+
+        try {
+            int fila = tblRegistro.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un jugador");
+                return;
+            }
+            int id = Integer.parseInt(tblRegistro.getValueAt(fila, 0).toString());
+
+            String sql = "UPDATE jugadores SET nombre = ?, tipo_rol =?,nombre_equipo=? WHERE id = ?";
+            PreparedStatement ps = conexion.conectar().prepareStatement(sql);
+            ps.setString(1, txtNombre.getText());
+            ps.setString(2, cbPosicion.getSelectedItem().toString());
+            ps.setString(3, cbEquipo.getSelectedItem().toString());
+            ps.setInt(4, id);
+
+            ps.executeUpdate();
+            ps.close();
+            conexion.desconectar();
+
+            JOptionPane.showMessageDialog(this, "Jugador actualizado correctamente");
+            cargarTabla();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        }
+
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //eliminar al tocar la table
+        Conexion conexion = new Conexion();
+        try {
+
+            int fila = tblRegistro.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un jugador para eliminar");
+                return;
+            }
+            int id = Integer.parseInt(tblRegistro.getValueAt(fila, 0).toString());
+            int confirm = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar este jugador?",
+                    "Confirmar",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirm != JOptionPane.YES_NO_OPTION) {
+                return;
+            }
+
+            String sql = "DELETE FROM jugadores WHERE id =?";
+            PreparedStatement ps = conexion.conectar().prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+            ps.close();
+            conexion.desconectar();
+
+            JOptionPane.showMessageDialog(this, "Jugador eliminado exitosamente");
+
+            cargarTabla();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
+
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     public void volverPrincipal() {
