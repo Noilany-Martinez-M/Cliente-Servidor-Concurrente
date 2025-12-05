@@ -1,8 +1,7 @@
-
 package com.mycompany.mavenproject1.clases;
 
 public abstract class JugadorFutbol {
-    private static int contador = 1;
+
     protected int id;
     protected String nombre;
     protected String equipo;
@@ -10,7 +9,7 @@ public abstract class JugadorFutbol {
     protected int acciones;
 
     public JugadorFutbol(String nombre, String equipo) {
-        this.id = contador++;
+        this.id = 0;
         this.nombre = nombre;
         this.equipo = equipo;
         this.goles = 0;
@@ -24,11 +23,29 @@ public abstract class JugadorFutbol {
     public abstract String generarMensaje();
 
     // Getters y Setters
-    public int getId() { return id; }
-    public String getNombre() { return nombre; }
-    public String getEquipo() { return equipo; }
-    public int getGoles() { return goles; }
-    public int getAcciones() { return acciones; }
+    public int getId() {
+        return id;
+    }
+
+     public void setId(int id) {
+        this.id = id;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getEquipo() {
+        return equipo;
+    }
+
+    public int getGoles() {
+        return goles;
+    }
+
+    public int getAcciones() {
+        return acciones;
+    }
 
     public void setEquipo(String equipo) {
         this.equipo = equipo;
@@ -41,4 +58,6 @@ public abstract class JugadorFutbol {
     public void sumarAccion() {
         this.acciones++;
     }
+
+
 }

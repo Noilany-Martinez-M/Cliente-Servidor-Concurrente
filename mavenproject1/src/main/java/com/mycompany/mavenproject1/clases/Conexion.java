@@ -17,9 +17,9 @@ public class Conexion {
 
     public Conexion() {
         this.url = "jdbc:mysql://localhost:3306/";
-        this.db = "proyectofut5";
+        this.db = "futbol5";
         this.user = "root";
-        this.password = "Fidelitas.23";
+        this.password = "Progra2025#";
         this.driver = "com.mysql.cj.jdbc.Driver";
     }
 

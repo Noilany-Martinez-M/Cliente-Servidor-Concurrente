@@ -17,6 +17,7 @@ import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import java.sql.PreparedStatement;
 import com.mycompany.mavenproject1.clases.Conexion;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class FrJugador extends javax.swing.JFrame {
 
@@ -63,22 +64,21 @@ public class FrJugador extends javax.swing.JFrame {
         modeloTabla = new DefaultTableModel(null, columnas);
 
         try {
-            String sql = "SELECT id, nombre, tipo_rol, nombre equipo FROM jugadores";
+            String sql = "SELECT id, nombre, tipo_rol, nombre_equipo FROM jugadores";
             PreparedStatement ps = conexion.conectar().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             modeloTabla.setRowCount(0);
             while (rs.next()) {
                 modeloTabla.addRow(new Object[]{
-                     rs.getInt("id"),
-                     rs.getString("nombre"),
-                     rs.getString("tipo_rol"),
-                     rs.getString("nombre_equipo")
-                        
-                    
+                    rs.getInt("id"),
+                    rs.getString("nombre"),
+                    rs.getString("tipo_rol"),
+                    rs.getString("nombre_equipo")
+
                 });
 
             }
-            
+
             tblRegistro.setModel(modeloTabla);
             rs.close();
             ps.close();
@@ -314,11 +314,9 @@ public class FrJugador extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         //RECORDAR AGREGAR A BASE DE DATOS-----------------------------------
         Conexion conexion = new Conexion();
-
         try {
 
             String nombre = txtNombre.getText().trim();
-
             String Posicion = cbPosicion.getSelectedItem().toString();
             String Equipo = cbEquipo.getSelectedItem().toString();
 
@@ -344,18 +342,23 @@ public class FrJugador extends javax.swing.JFrame {
                     nuevo = new Mediocampo(nombre, Equipo);
                     break;
             }
-            //RECORDAR AGREGAR A BASE DE DATOS
-            Util.listaJugadores.add(nuevo);
 
             try {
                 String sql = "INSERT INTO jugadores (nombre, tipo_rol,nombre_equipo,goles,acciones) VALUES (?,?,?,0,0)";
-                PreparedStatement ps = conexion.conectar().prepareStatement(sql);
+                PreparedStatement ps = conexion.conectar().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, nuevo.getNombre());
                 ps.setString(2, nuevo.getClass().getSimpleName());
                 ps.setString(3, nuevo.getEquipo());
 
                 ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int idGenerado = rs.getInt(1);
+                    nuevo.setId(idGenerado);
+                }
                 ps.close();
+                rs.close();
+                conexion.desconectar();
 
                 JOptionPane.showMessageDialog(this, "Jugador agregado correctamente");
             } catch (Exception ex) {
@@ -369,6 +372,7 @@ public class FrJugador extends javax.swing.JFrame {
                     + "\nEquipo: " + nuevo.getEquipo()
                     + "\nRegistro Exitoso");
 
+            Util.listaJugadores.add(nuevo);
             limpiarFormulario();
             cargarTabla();
 
