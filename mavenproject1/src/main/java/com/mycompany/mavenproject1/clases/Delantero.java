@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.mavenproject1;
 
+package com.mycompany.mavenproject1.clases;
+
+import com.mycompany.mavenproject1.clases.JugadorFutbol;
 import java.util.Random;
 
 /**
@@ -19,8 +17,8 @@ public class Delantero extends JugadorFutbol {
             "gana la posición y remata de primera."
     };
 
-    public Delantero(int id, String nombre, String equipo) {
-        super(id, nombre, equipo);
+    public Delantero(String nombre, String equipo) {
+        super(nombre, equipo);
     }
 
     @Override
