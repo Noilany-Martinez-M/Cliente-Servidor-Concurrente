@@ -16,8 +16,13 @@ import com.mycompany.mavenproject1.clases.*;
 import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import java.sql.PreparedStatement;
 import com.mycompany.mavenproject1.clases.Conexion;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+
 
 public class FrJugador extends javax.swing.JFrame {
 
@@ -36,25 +41,22 @@ public class FrJugador extends javax.swing.JFrame {
         this.principal = principal;
 
         //TABLA DE JUGADORES
-        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Rol",
-            "Equipo"}, 0);
-        tblRegistro.setModel(modeloTabla);
+        cargarTabla();
 
-        //-------[COMBO BOX EQUIPOS
+        //COMBO BOX EQUIPOS
         cbPosicion.removeAllItems();
 
         cbPosicion.addItem("Portero");
         cbPosicion.addItem("Defensa");
         cbPosicion.addItem("Delantero");
-        cbPosicion.addItem("Medio Campo");
+        cbPosicion.addItem("MedioCampo");
 
-        //-------[COMBO BOX EQUIPOS
+        //COMBO BOX EQUIPOS
         cbEquipo.removeAllItems();
-
         cbEquipo.addItem("Ninguno");
-        for (Equipo eq : Util.listaEquipo) {
-            cbEquipo.addItem(eq.getNombre());
-        }
+        Equipo.cargarEquipos(cbEquipo);
+        
+        limpiarFormulario();
 
     }
 
@@ -62,7 +64,16 @@ public class FrJugador extends javax.swing.JFrame {
         Conexion conexion = new Conexion();
         String[] columnas = {"ID", "Nombre", "Rol", "Equipo"};
         modeloTabla = new DefaultTableModel(null, columnas);
-
+        
+        tblRegistro.setModel(modeloTabla);
+        tblRegistro.setDefaultEditor(Object.class, null);
+        tblRegistro.setRowHeight(25);
+        tblRegistro.getTableHeader().setReorderingAllowed(false);
+        tblRegistro.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 18));
+        tblRegistro.getTableHeader().setForeground(new Color(102, 102, 255));
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) tblRegistro.getTableHeader().getDefaultRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        
         try {
             String sql = "SELECT id, nombre, tipo_rol, nombre_equipo FROM jugadores";
             PreparedStatement ps = conexion.conectar().prepareStatement(sql);
@@ -86,7 +97,6 @@ public class FrJugador extends javax.swing.JFrame {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error" + ex.getMessage());
-
         }
 
     }
@@ -263,6 +273,11 @@ public class FrJugador extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblRegistro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblRegistroMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblRegistro);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -303,8 +318,6 @@ public class FrJugador extends javax.swing.JFrame {
         if (cbPosicion.getSelectedItem() == null) {
             return;
         }
-
-
     }//GEN-LAST:event_cbPosicionActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -314,6 +327,7 @@ public class FrJugador extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         //RECORDAR AGREGAR A BASE DE DATOS-----------------------------------
         Conexion conexion = new Conexion();
+        Equipo e = new Equipo();
         try {
 
             String nombre = txtNombre.getText().trim();
@@ -338,32 +352,32 @@ public class FrJugador extends javax.swing.JFrame {
                 case "Delantero":
                     nuevo = new Delantero(nombre, Equipo);
                     break;
-                case "Medio Campo":
+                case "MedioCampo":
                     nuevo = new Mediocampo(nombre, Equipo);
                     break;
             }
 
-            try {
-                String sql = "INSERT INTO jugadores (nombre, tipo_rol,nombre_equipo,goles,acciones) VALUES (?,?,?,0,0)";
-                PreparedStatement ps = conexion.conectar().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, nuevo.getNombre());
-                ps.setString(2, nuevo.getClass().getSimpleName());
-                ps.setString(3, nuevo.getEquipo());
+            String sql = "INSERT INTO jugadores (nombre, tipo_rol,nombre_equipo,goles,acciones) VALUES (?,?,?,0,0)";
+            PreparedStatement ps = conexion.conectar().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, nuevo.getNombre());
+            ps.setString(2, nuevo.getClass().getSimpleName());
+            ps.setString(3, nuevo.getEquipo());
 
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
-                    nuevo.setId(idGenerado);
-                }
-                ps.close();
-                rs.close();
-                conexion.desconectar();
-
-                JOptionPane.showMessageDialog(this, "Jugador agregado correctamente");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1);
+                nuevo.setId(idGenerado);
             }
+            ps.close();
+            rs.close();
+            conexion.desconectar();
+
+            if (!Equipo.equalsIgnoreCase("Ninguno")) {
+                e.sumarJugador(Equipo);
+            }
+
+            JOptionPane.showMessageDialog(this, "Jugador agregado correctamente");
 
             JOptionPane.showMessageDialog(this, "Jugador agregado correctamente\n"
                     + "ID: " + nuevo.getId()
@@ -386,6 +400,10 @@ public class FrJugador extends javax.swing.JFrame {
         cbPosicion.setSelectedIndex(0);
         cbEquipo.setSelectedIndex(0);
 
+        btnAgregar.setEnabled(true);
+        btnEditar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -393,15 +411,21 @@ public class FrJugador extends javax.swing.JFrame {
         //poner en el formulario los datos del jugador al apretarlo en la table
 
         Conexion conexion = new Conexion();
+        Equipo e = new Equipo();
 
         try {
+            
             int fila = tblRegistro.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(this, "Seleccione un jugador");
                 return;
             }
             int id = Integer.parseInt(tblRegistro.getValueAt(fila, 0).toString());
-
+            
+            String equipoAnterior = tblRegistro.getValueAt(fila, 3).toString();
+        
+            String nuevoEquipo = cbEquipo.getSelectedItem().toString();
+            
             String sql = "UPDATE jugadores SET nombre = ?, tipo_rol =?,nombre_equipo=? WHERE id = ?";
             PreparedStatement ps = conexion.conectar().prepareStatement(sql);
             ps.setString(1, txtNombre.getText());
@@ -413,8 +437,20 @@ public class FrJugador extends javax.swing.JFrame {
             ps.close();
             conexion.desconectar();
 
+            if (equipoAnterior.equals("Ninguno") && !nuevoEquipo.equals("Ninguno")) {
+            e.sumarJugador(nuevoEquipo);
+        }else if (!equipoAnterior.equals("Ninguno") && nuevoEquipo.equals("Ninguno")) {
+            e.restarJugador(equipoAnterior);
+        }else if (!equipoAnterior.equals("Ninguno")
+                && !nuevoEquipo.equals("Ninguno")
+                && !equipoAnterior.equalsIgnoreCase(nuevoEquipo)) {
+            e.restarJugador(equipoAnterior);
+            e.sumarJugador(nuevoEquipo);
+        }
+
             JOptionPane.showMessageDialog(this, "Jugador actualizado correctamente");
             cargarTabla();
+            limpiarFormulario();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
@@ -425,9 +461,12 @@ public class FrJugador extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         Conexion conexion = new Conexion();
+        Equipo e = new Equipo();
         try {
 
             int fila = tblRegistro.getSelectedRow();
+            String equipoJugador = tblRegistro.getValueAt(fila, 3).toString();
+            
             if (fila == -1) {
                 JOptionPane.showMessageDialog(this, "Seleccione un jugador para eliminar");
                 return;
@@ -449,15 +488,54 @@ public class FrJugador extends javax.swing.JFrame {
             ps.close();
             conexion.desconectar();
 
+            if (!equipoJugador.equals("Ninguno")) {
+            e.restarJugador(equipoJugador);
+        }
             JOptionPane.showMessageDialog(this, "Jugador eliminado exitosamente");
 
             cargarTabla();
+            limpiarFormulario();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
 
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblRegistroMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRegistroMousePressed
+        
+        //presionar
+        int fila = tblRegistro.getSelectedRow();
+        if (fila == -1){
+            return;
+        }
+        
+        txtNombre.setText(tblRegistro.getValueAt(fila, 1).toString());
+
+        String equipo = tblRegistro.getValueAt(fila, 3).toString().trim();
+        cbEquipo.setSelectedIndex(-1);
+
+        for (int i = 0; i < cbEquipo.getItemCount(); i++) {
+            if (cbEquipo.getItemAt(i).toString().trim().equalsIgnoreCase(equipo)) {
+                cbEquipo.setSelectedIndex(i);
+                break;
+            }
+        }
+
+        String pos = tblRegistro.getValueAt(fila, 2).toString().trim();
+        cbPosicion.setSelectedIndex(-1);
+
+        for (int i = 0; i < cbPosicion.getItemCount(); i++) {
+            if (cbPosicion.getItemAt(i).toString().trim().equalsIgnoreCase(pos)) {
+                cbPosicion.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        btnAgregar.setEnabled(false);
+        btnEditar.setEnabled(true);
+        btnEliminar.setEnabled(true);
+    }//GEN-LAST:event_tblRegistroMousePressed
 
     public void volverPrincipal() {
         principal.setVisible(true);

@@ -75,7 +75,7 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHilosPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -113,12 +113,11 @@ public class Menu extends javax.swing.JFrame {
     private void btnHilosPartidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHilosPartidoActionPerformed
         
         
-        // Abrir la ventana de simulación
-    SimulacionPartido ventana = new SimulacionPartido();
-    ventana.setLocationRelativeTo(null); // Centrado
-    ventana.setVisible(true);
-        
-        
+        SimulacionPartido ventana = new SimulacionPartido(this);
+        ventana.setVisible(true);
+        setVisible(false);
+
+
     }//GEN-LAST:event_btnHilosPartidoActionPerformed
 
     public static void main(String args[]) {

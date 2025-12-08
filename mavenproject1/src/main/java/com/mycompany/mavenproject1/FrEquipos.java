@@ -1,24 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.mavenproject1;
 import com.mycompany.mavenproject1.clases.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.CallableStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Maytan
- */
+
 public class FrEquipos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrEquipos
-     */
+    
     public FrEquipos(Menu principal) {
         initComponents();
         
@@ -31,8 +28,12 @@ public class FrEquipos extends javax.swing.JFrame {
             }
         });
         
+        txtId.setEditable(false);
+        txtCantJug.setEditable(false);
+        
         this.principal = principal;
         cargarTablaEquipos();
+        limpiar();
     }
 
     /**
@@ -49,11 +50,14 @@ public class FrEquipos extends javax.swing.JFrame {
         txtNombreEq = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        txtCantJug = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
         btnCrear = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEquipos = new javax.swing.JTable();
 
@@ -81,6 +85,20 @@ public class FrEquipos extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ID");
 
+        txtId.setBackground(new java.awt.Color(255, 255, 255));
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
+
+        txtCantJug.setBackground(new java.awt.Color(255, 255, 255));
+        txtCantJug.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantJugActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -88,26 +106,36 @@ public class FrEquipos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCantJug, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(8, 8, 8)
-                        .addComponent(txtNombreEq, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(txtNombreEq, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel3)
-                .addGap(27, 27, 27)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombreEq, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtCantJug, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(242, 242, 242));
@@ -115,7 +143,7 @@ public class FrEquipos extends javax.swing.JFrame {
         btnAgregar.setBackground(new java.awt.Color(102, 102, 255));
         btnAgregar.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar.setText("Agregar");
+        btnAgregar.setText("Agregar jugador");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
@@ -125,7 +153,7 @@ public class FrEquipos extends javax.swing.JFrame {
         btnCrear.setBackground(new java.awt.Color(102, 102, 255));
         btnCrear.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         btnCrear.setForeground(new java.awt.Color(255, 255, 255));
-        btnCrear.setText("Crear");
+        btnCrear.setText("Crear equipo");
         btnCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCrearActionPerformed(evt);
@@ -135,7 +163,7 @@ public class FrEquipos extends javax.swing.JFrame {
         btnEditar.setBackground(new java.awt.Color(102, 102, 255));
         btnEditar.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         btnEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar.setText("Editar");
+        btnEditar.setText("Editar nombre");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
@@ -145,10 +173,20 @@ public class FrEquipos extends javax.swing.JFrame {
         btnEliminar.setBackground(new java.awt.Color(102, 102, 255));
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setText("Eliminar");
+        btnEliminar.setText("Eliminar equipo");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnLimpiar.setBackground(new java.awt.Color(102, 102, 255));
+        btnLimpiar.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -162,21 +200,24 @@ public class FrEquipos extends javax.swing.JFrame {
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         tblEquipos.setBackground(new java.awt.Color(242, 242, 242));
@@ -199,6 +240,11 @@ public class FrEquipos extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tblEquipos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblEquiposMousePressed(evt);
+            }
+        });
         tblEquipos.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 tblEquiposComponentHidden(evt);
@@ -209,9 +255,9 @@ public class FrEquipos extends javax.swing.JFrame {
             tblEquipos.getColumnModel().getColumn(0).setPreferredWidth(40);
             tblEquipos.getColumnModel().getColumn(0).setMaxWidth(70);
             tblEquipos.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tblEquipos.getColumnModel().getColumn(1).setMaxWidth(125);
-            tblEquipos.getColumnModel().getColumn(2).setPreferredWidth(35);
-            tblEquipos.getColumnModel().getColumn(2).setMaxWidth(60);
+            tblEquipos.getColumnModel().getColumn(1).setMaxWidth(150);
+            tblEquipos.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tblEquipos.getColumnModel().getColumn(2).setMaxWidth(125);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -221,23 +267,23 @@ public class FrEquipos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(181, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -254,23 +300,21 @@ public class FrEquipos extends javax.swing.JFrame {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         try {
             String nombreEquipo = txtNombreEq.getText().trim();
-            
-            if(nombreEquipo.isEmpty()){
+
+            if (nombreEquipo.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No es posible que deje ningun espacio vacio",
                         "Campos vacíos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
+
             Equipo nuevo = new Equipo(nombreEquipo);
-            
-            Util.listaEquipo.add(nuevo);
-            
-            JOptionPane.showMessageDialog(this, "Equipo agregado correctamente\n ID: "+nuevo.getId()+"\nNombre: "+nuevo.getNombre()+"\nRegistro exitoso");
-            
-            txtNombreEq.setText("");
+
+            String mensaje = nuevo.agregar();
+            JOptionPane.showMessageDialog(this, mensaje);
+
             cargarTablaEquipos();
-            
-            
+            limpiar();
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad de obras e ingresos deben de ser numericos", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
@@ -278,68 +322,68 @@ public class FrEquipos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCrearActionPerformed
 
+    public void limpiar(){
+        txtId.setText("");
+        txtNombreEq.setText("");
+        txtCantJug.setText("");
+        
+        btnEditar.setEnabled(false);
+        btnCrear.setEnabled(true);
+        btnEliminar.setEnabled(false);
+        btnAgregar.setEnabled(false);
+    }
+    
+    
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        try{
-            int fila = tblEquipos.getSelectedRow();
-            if (fila == -1){
-                JOptionPane.showMessageDialog(this, "Selecciona una tabla",
-                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
+        try {
+
             String nuevoNombre = txtNombreEq.getText().trim();
-            if(nuevoNombre.isEmpty()){
-                JOptionPane.showMessageDialog(this, "",
-                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            int codigo = Integer.parseInt(txtId.getText());
             
-            Equipo equipoSelec = Util.listaEquipo.get(fila);
-            String equipoAnt = equipoSelec.getNombre();
-            
-            equipoSelec.setNombre(nuevoNombre);
-            
-            for(JugadorFutbol jugador : Util.listaJugadores){
-                if (jugador.getEquipo().equalsIgnoreCase(equipoAnt)){
-                    jugador.setEquipo(nuevoNombre);
-                }
-            }
-            
-            JOptionPane.showMessageDialog(this, "El equipo fue renombrado correctamente\nAntiguo: "+equipoAnt+"\nNuevo: "+nuevoNombre);
-            
-            cargarTablaEquipos();        
-                    
+        if (nuevoNombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
+            return;
+        }
+
+        Equipo equipoEditado = new Equipo(codigo, nuevoNombre);
+
+        String mensaje = equipoEditado.editar();
+        JOptionPane.showMessageDialog(this, mensaje);
+
+        cargarTablaEquipos();
+        txtNombreEq.setText("");
+        limpiar();
+
         }catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-         try{
-            int fila = tblEquipos.getSelectedRow();
-            if (fila == -1){
-                JOptionPane.showMessageDialog(this, "Selecciona una tabla",
-                        "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            Equipo equipoSelec = Util.listaEquipo.get(fila);
-            String equipoNom = equipoSelec.getNombre();
-            
-            int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar el equipos "+equipoSelec+"?","CONFIRMAR ELIMINACION",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            
-            if(opcion ==JOptionPane.YES_OPTION){
-                Util.listaEquipo.remove(equipoSelec);
-                for (JugadorFutbol jugador : Util.listaJugadores) {
-                    if (jugador.getEquipo().equalsIgnoreCase(equipoNom)) {
-                        jugador.setEquipo("Ninguno");
-                    }
-                }
-                JOptionPane.showMessageDialog(this, "Equipo eliminado Correctamente\nLos jugadores ahora no pertenecen a ningun equipo\nEliminacion Exitosa");
-            
-                cargarTablaEquipos(); 
-                
-            }
+        int codigo = Integer.parseInt(txtId.getText());
+        String nombre = txtNombreEq.getText().trim();
+        
+        try{
+            int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Eliminar el equipo: " + nombre + "?",
+                "Eliminar",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion != JOptionPane.YES_OPTION) return;
+        
+        // Cambiar jugadores de ese equipo a "Ninguno"
+        actualizarJugadoresNombre(nombre, "Ninguno");
+        
+
+        Equipo equipo = new Equipo(codigo);
+
+        String mensaje = equipo.eliminar();
+        JOptionPane.showMessageDialog(this, mensaje);
+
+        cargarTablaEquipos();
+        txtNombreEq.setText("");
             
                    
                     
@@ -348,21 +392,76 @@ public class FrEquipos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    public static void actualizarJugadoresNombre(String viejo, String nuevo) {
+    Conexion conexion = new Conexion();
+
+    String sql = """
+                 UPDATE jugadores SET
+                 nombre_equipo = ?
+                 WHERE nombre_equipo = ?
+                 """;
+
+    try {
+        CallableStatement cs = conexion.conectar().prepareCall(sql);
+        cs.setString(1, nuevo);
+        cs.setString(2, viejo);
+
+        cs.execute();
+
+    } catch (Exception ex) {
+        System.out.println("Exception: " + ex.getMessage());
+    } finally {
+        conexion.desconectar();
+    }
+}
+
     private void tblEquiposComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tblEquiposComponentHidden
         // TODO add your handling code here:
     }//GEN-LAST:event_tblEquiposComponentHidden
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void txtCantJugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantJugActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantJugActionPerformed
+
+    private void tblEquiposMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEquiposMousePressed
+      
+        int fila = tblEquipos.getSelectedRow();
+        if (fila == -1){
+            return;
+        }
+        
+        txtId.setText(tblEquipos.getValueAt(fila, 0).toString());
+        txtNombreEq.setText(tblEquipos.getValueAt(fila, 1).toString());
+        txtCantJug.setText(tblEquipos.getValueAt(fila, 2).toString());
+        
+        btnEditar.setEnabled(true);
+        btnCrear.setEnabled(false);
+        btnEliminar.setEnabled(true);
+        btnAgregar.setEnabled(true);
+    }//GEN-LAST:event_tblEquiposMousePressed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
     
     private void cargarTablaEquipos(){
         DefaultTableModel modelo = (DefaultTableModel)tblEquipos.getModel();
         modelo.setRowCount(0);
         
-        for(Equipo eq: Util.listaEquipo){
-            Object[] fila = {
-                eq.getId(), eq.getNombre(), eq.getJugadores()
-            };
-            
-            modelo.addRow(fila);
-        }
+        tblEquipos.setDefaultEditor(Object.class, null);
+        tblEquipos.setRowHeight(25);
+        tblEquipos.getTableHeader().setReorderingAllowed(false);
+        tblEquipos.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 18));
+        tblEquipos.getTableHeader().setForeground(new Color(102, 102, 255));
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) tblEquipos.getTableHeader().getDefaultRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        tblEquipos.setModel(Equipo.consultar());
     }
     
     public void volverPrincipal() {
@@ -378,6 +477,7 @@ public class FrEquipos extends javax.swing.JFrame {
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -385,6 +485,8 @@ public class FrEquipos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblEquipos;
+    private javax.swing.JTextField txtCantJug;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombreEq;
     // End of variables declaration//GEN-END:variables
 }
