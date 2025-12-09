@@ -127,7 +127,11 @@ public class Equipo {
     public String agregar() {
         Conexion conexion = new Conexion();
 
-        String sql = "INSERT INTO equipos (nombre, cantidad_jugadores) VALUES (?, 0)";
+       String sql = """
+            INSERT INTO equipos 
+            (nombre, cantidad_jugadores, partidos_jugados, victorias, empates, derrotas, goles_favor, goles_contra, puntos)
+            VALUES (?, 0, 0, 0, 0, 0, 0, 0, 0)
+        """;
 
         try {
             CallableStatement cs = conexion.conectar().prepareCall(sql);
@@ -157,11 +161,20 @@ public class Equipo {
                  """;
 
         try {
+
+            String nombreViejo = obtenerNombreAnterior(this.id);
+
             CallableStatement cs = conexion.conectar().prepareCall(sql);
             cs.setString(1, this.nombre);
             cs.setInt(2, this.id);
 
             cs.execute();
+
+            String sqlJug = "UPDATE jugadores SET nombre_equipo = ? WHERE nombre_equipo = ?";
+            CallableStatement csJug = conexion.conectar().prepareCall(sqlJug);
+            csJug.setString(1, this.nombre);      // nuevo nombre
+            csJug.setString(2, nombreViejo);      // nombre viejo
+            csJug.execute();
 
             return "Equipo modificado con éxito.";
 
@@ -174,6 +187,31 @@ public class Equipo {
             conexion.desconectar();
         }
     }
+    
+    
+    private String obtenerNombreAnterior(int id) {
+    Conexion conexion = new Conexion();
+    String nombre = "";
+
+    try {
+        String sql = "SELECT nombre FROM equipos WHERE id = ?";
+        CallableStatement cs = conexion.conectar().prepareCall(sql);
+        cs.setInt(1, id);
+
+        ResultSet rs = cs.executeQuery();
+        if (rs.next()) {
+            nombre = rs.getString("nombre");
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error obteniendo nombre anterior: " + e.getMessage());
+    } finally {
+        conexion.desconectar();
+    }
+
+    return nombre;
+}
+    
     //---------------------------------------------------------------------------------
     public String eliminar() {
         Conexion conexion = new Conexion();
@@ -197,7 +235,7 @@ public class Equipo {
         }
     }
 
-    //---------------------------------------------------------------------------------
+    //-------------------TODAS LAS TABLAS------------------------------------
     
     public static DefaultTableModel consultar() {
         Conexion conexion = new Conexion();
@@ -235,10 +273,51 @@ public class Equipo {
 
         return modelo;
     }
+
+    public static DefaultTableModel consultarSinEquipo() {
+        Conexion conexion = new Conexion();
+
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        modelo.addColumn("Id");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Posición");
+
+        String[] datos = new String[3];
+
+        try {
+            Statement stmt = conexion.conectar().createStatement();
+            ResultSet rs = stmt.executeQuery("""
+            SELECT id, nombre, tipo_rol
+            FROM jugadores
+            WHERE nombre_equipo = 'Ninguno'
+        """);
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                datos[2] = rs.getString(3);
+                modelo.addRow(datos);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error cargando jugadores sin equipo: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+
+        return modelo;
+    }
     
-    //cargar los equipos para luego llevarlos a jugadores
+    //cargar los equipos para luego llevarlos a jugadores----------------------------------------------------
     
     public static void cargarEquipos(JComboBox combo) {
+        
     Conexion conexion = new Conexion();
     combo.removeAllItems();
 
@@ -264,28 +343,30 @@ public class Equipo {
 }
     
     //REGRAS DE CONSISTENCIA---------------------------------------------------------------------------------
-        public static void sumarJugador(String nombreEquipo) {
+    public static String sumarJugador(String nombreEquipo) {
         Conexion conexion = new Conexion();
 
         String sql = """
-                 UPDATE equipos SET
-                 cantidad_jugadores = cantidad_jugadores + 1
-                 WHERE nombre = ?
-                 """;
+        UPDATE equipos SET
+        cantidad_jugadores = cantidad_jugadores + 1
+        WHERE nombre = ?
+        """;
 
         try {
             CallableStatement cs = conexion.conectar().prepareCall(sql);
             cs.setString(1, nombreEquipo);
             cs.execute();
+            return "Jugador sumado correctamente.";
 
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.getMessage());
+            return "Error al sumar jugador: " + ex.getMessage();
         } finally {
             conexion.desconectar();
         }
     }
+
     //RESTAR JUGADOR--------------------------------------------------------------------------------------
-    public static void restarJugador(String nombreEquipo) {
+    public static String restarJugador(String nombreEquipo) {
         Conexion conexion = new Conexion();
 
         String sql = """
@@ -298,14 +379,36 @@ public class Equipo {
             CallableStatement cs = conexion.conectar().prepareCall(sql);
             cs.setString(1, nombreEquipo);
             cs.execute();
-
+            return "Jugador sumado correctamente.";
+            
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.getMessage());
+            return "Error al restar: " + ex.getMessage();
         } finally {
             conexion.desconectar();
         }
     }
     
-    
+    //para la simulacion
+    public static void cargarEquiposValidos(JComboBox combo) {
+    Conexion conexion = new Conexion();
+    combo.removeAllItems();
+
+    try {
+        Statement stmt = conexion.conectar().createStatement();
+        ResultSet rs = stmt.executeQuery(
+            "SELECT nombre FROM equipos WHERE cantidad_jugadores >= 5"
+        );
+
+        while (rs.next()) {
+            combo.addItem(rs.getString("nombre"));
+        }
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null,
+            "Error cargando equipos válidos: " + ex.getMessage());
+    } finally {
+        conexion.desconectar();
+    }
+}
 
 }

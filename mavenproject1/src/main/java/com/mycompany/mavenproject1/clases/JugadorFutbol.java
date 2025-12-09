@@ -23,6 +23,15 @@ public abstract class JugadorFutbol {
     public abstract String generarMensaje();
 
     // Getters y Setters
+
+    public void setGoles(int goles) {
+        this.goles = goles;
+    }
+
+    public void setAcciones(int acciones) {
+        this.acciones = acciones;
+    }
+    
     public int getId() {
         return id;
     }
