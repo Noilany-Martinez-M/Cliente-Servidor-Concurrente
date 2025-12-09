@@ -8,6 +8,8 @@ public class Menu extends javax.swing.JFrame {
     public Menu() {
         initComponents();
         setLocationRelativeTo(null);
+        iniciarServidor();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -98,6 +100,13 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarServidor(){
+    Thread server = new Thread(new Reportes_Servidor());
+    server.start();
+    System.out.println("Servidor de reportes iniciado....");
+     
+    }
+            
     private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
         FrEquipos frequipos = new FrEquipos(this);
         frequipos.setVisible(true);

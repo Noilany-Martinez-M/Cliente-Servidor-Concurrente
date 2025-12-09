@@ -1,12 +1,20 @@
+package com.mycompany.mavenproject1;
+
+import com.mycompany.mavenproject1.clases.Reportes_Cliente;
+import com.mycompany.mavenproject1.clases.Reportes_Servidor;
+import javax.swing.JOptionPane;
 
 public class FrCliente extends javax.swing.JFrame {
+    private static boolean servidorIniciado = false;
 
-    
     public FrCliente() {
         initComponents();
+        if(!servidorIniciado){
+          iniciarServidor();
+          servidorIniciado=true;
+        }
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -16,6 +24,8 @@ public class FrCliente extends javax.swing.JFrame {
         btnMaximosGoleadores = new javax.swing.JButton();
         btnTablaPosiciones = new javax.swing.JButton();
         btnRendimientoEquipos = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtresultados = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,18 +71,24 @@ public class FrCliente extends javax.swing.JFrame {
             }
         });
 
+        txtresultados.setColumns(20);
+        txtresultados.setRows(5);
+        jScrollPane1.setViewportView(txtresultados);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnMaximosGoleadores, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
-                    .addComponent(btnHistorialPartidos, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
-                    .addComponent(btnRendimientoEquipos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
-                    .addComponent(btnTablaPosiciones, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnRendimientoEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                        .addComponent(btnMaximosGoleadores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnHistorialPartidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTablaPosiciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,12 +96,14 @@ public class FrCliente extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(btnTablaPosiciones, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnHistorialPartidos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(btnHistorialPartidos, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(btnMaximosGoleadores, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnRendimientoEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addComponent(btnRendimientoEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -108,23 +126,44 @@ public class FrCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarServidor() {
+    Thread server = new Thread(new Reportes_Servidor());
+    server.start();
+    System.out.println("Servidor de reportes iniciado...");
+}
+    
+    
+    
     private void btnHistorialPartidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialPartidosActionPerformed
-        
+        String reporte = Reportes_Cliente.solicitarReporte("historial");
+        JOptionPane.showMessageDialog(this, reporte);
     }//GEN-LAST:event_btnHistorialPartidosActionPerformed
 
     private void btnMaximosGoleadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaximosGoleadoresActionPerformed
-        // TODO add your handling code here:
+        String reporte = Reportes_Cliente.solicitarReporte("goleadores");
+        JOptionPane.showMessageDialog(this, reporte);
+
     }//GEN-LAST:event_btnMaximosGoleadoresActionPerformed
 
     private void btnTablaPosicionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTablaPosicionesActionPerformed
-        // TODO add your handling code here:
+        String reporte = Reportes_Cliente.solicitarReporte("tabla_posiciones");
+        JOptionPane.showMessageDialog(this, reporte);
+
+
     }//GEN-LAST:event_btnTablaPosicionesActionPerformed
 
     private void btnRendimientoEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRendimientoEquiposActionPerformed
-        // TODO add your handling code here:
+        String reporte = Reportes_Cliente.solicitarReporte("rendimiento");
+        JOptionPane.showMessageDialog(this, reporte);
+
+
     }//GEN-LAST:event_btnRendimientoEquiposActionPerformed
 
-    
+    private void mostrarResultado(String texto) {
+        txtresultados.setText(texto); //MOSTRAR RESULTADOS EN EL AREA EN BLANCO
+
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -163,5 +202,7 @@ public class FrCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnRendimientoEquipos;
     private javax.swing.JButton btnTablaPosiciones;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea txtresultados;
     // End of variables declaration//GEN-END:variables
 }
