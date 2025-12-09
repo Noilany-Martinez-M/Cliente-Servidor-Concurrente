@@ -123,7 +123,7 @@ public class Equipo {
         this.puntos = puntos;
     }
 
-    //CRUD---------------------------------------------------------------------------------
+    //CRUD para agregar equuipos a la bd
     public String agregar() {
         Conexion conexion = new Conexion();
 
@@ -150,7 +150,7 @@ public class Equipo {
             conexion.desconectar();
         }
     }
-    //---------------------------------------------------------------------------------
+    //editar equipos de la base de datos(nombres unicamente
     public String editar() {
         Conexion conexion = new Conexion();
 
@@ -188,7 +188,8 @@ public class Equipo {
         }
     }
     
-    
+    //metodo especial para obtener el nombre antes de cambiar
+    //asi se cambian los jugadores de equipo si es que se modifica el nombre
     private String obtenerNombreAnterior(int id) {
     Conexion conexion = new Conexion();
     String nombre = "";
@@ -212,7 +213,7 @@ public class Equipo {
     return nombre;
 }
     
-    //---------------------------------------------------------------------------------
+    //mmetodo para eliminar equipos de la base de datos por medio de su codigo
     public String eliminar() {
         Conexion conexion = new Conexion();
 
@@ -235,7 +236,7 @@ public class Equipo {
         }
     }
 
-    //-------------------TODAS LAS TABLAS------------------------------------
+    //consultar los datos principales de los equipo
     
     public static DefaultTableModel consultar() {
         Conexion conexion = new Conexion();
@@ -274,6 +275,7 @@ public class Equipo {
         return modelo;
     }
 
+    //consultar jugadores cuyo equipo es "Ninguno"
     public static DefaultTableModel consultarSinEquipo() {
         Conexion conexion = new Conexion();
 
@@ -314,7 +316,7 @@ public class Equipo {
         return modelo;
     }
     
-    //cargar los equipos para luego llevarlos a jugadores----------------------------------------------------
+    //Cargar los nombres de los equipos para poder anyadirlos al combo box de jugadores
     
     public static void cargarEquipos(JComboBox combo) {
         
@@ -342,7 +344,8 @@ public class Equipo {
     }
 }
     
-    //REGRAS DE CONSISTENCIA---------------------------------------------------------------------------------
+    //Sumar al contador de cantidad_jugadores si es que se agrega un jugador al equipo
+    //se pide el nombre del equipo para poder hacerlo
     public static String sumarJugador(String nombreEquipo) {
         Conexion conexion = new Conexion();
 
@@ -365,7 +368,8 @@ public class Equipo {
         }
     }
 
-    //RESTAR JUGADOR--------------------------------------------------------------------------------------
+    //Restar al contador de cantidad_jugadores si es que se saca un jugador del equipo
+    //se pide el nombre del equipo para poder hacerlo
     public static String restarJugador(String nombreEquipo) {
         Conexion conexion = new Conexion();
 
@@ -388,7 +392,7 @@ public class Equipo {
         }
     }
     
-    //para la simulacion
+    //metodo creado para validar los equipos que cuentan con 5 jugadores o mas
     public static void cargarEquiposValidos(JComboBox combo) {
     Conexion conexion = new Conexion();
     combo.removeAllItems();
